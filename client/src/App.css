@@ -1,0 +1,274 @@
+body {
+  /* background: linear-gradient(180deg,#060626 0,#130b3a 25%,#0e0e2c 40%,#080833 65%,#0d0d26); */
+  background: linear-gradient(to right, #010111, #060626);
+  color: #01B8D3;
+  font-size: 12px;
+  padding-top: 120px
+}
+
+.excoin-brandname {
+  font-size: 24px;
+}
+
+.navbar {
+  min-height: 80px;
+  background: #111134;
+  /* background: #050521; */
+  line-height: 80px;
+}
+
+main {
+  min-height: 330px;
+}
+
+.navbar ul li {
+  height: 80px;
+}
+
+.navbar-brand {
+  padding: 0 15px;
+  height: 80px;
+  line-height: 80px;
+  font-weight: bold;
+}
+
+.navbar-nav {
+  height: 80px;
+  line-height: 80px;
+  padding: 0 15px;
+}
+
+.navbar-default {
+  border-color: #141a45 !important;
+}
+
+.copyright {
+  padding: 10px 0;
+  color: #ccc;
+  background: #050521; /* #150343*/
+  
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+  border-top: 1px solid #14143b;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+  background-color: #0b0b23;
+}
+
+.table>thead>tr>th {
+  vertical-align: bottom;
+  border-bottom: 1px solid #ddd;
+}
+
+.border-bottom-0 {
+  border-bottom: 0;
+}
+
+.dream-btn {
+  position: relative;
+  z-index: 1;
+  min-width: 140px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  display: inline-block;
+  padding: 0 20px;
+  text-align: center;
+  text-transform: uppercase;
+  background-size: 200% auto;
+  color: #fff;
+  box-shadow: 0 3ox 20px rgba(0, 0, 0, 0.1);
+  border-radius: 100px;
+  background-image: -webkit-linear-gradient(left, #21d397 0%, #7450fe 51%, #21d397 100%);
+  background-image: linear-gradient(to right, #21d397 0%, #7450fe 51%, #21d397 100%);
+  -webkit-transition: all 500ms;
+  transition: all 500ms;
+  z-index: 0;
+}
+
+.color-green {
+  color: #8bc040 !important;
+}
+
+.color-red {
+  color: #de5f66 !important;
+}
+
+.excoin-color-light {
+  color: #01B8D3 !important;
+}
+
+.excoin-label-secondary {
+  color: #8288ff !important;
+}
+
+.excoin-label-primary {
+  color: #c2c2c2 !important;
+}
+
+.particles-js-canvas-el {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+  z-index: -99;
+}
+
+footer {
+  margin-top: 25px;
+}
+
+.margin-top-5 {
+  margin-top: 5px;
+}
+
+#excoin-footer-primary {
+  background: #0404338c !important;
+  padding: 20px;
+  border-bottom: 1px solid #141a45;
+}
+
+.panel.panel-default {
+  background: linear-gradient(to right, #090935a6, #09092ad9);
+  /* min-height: 258px; */
+}
+
+.excoin-padding-20 {
+  padding: 10px 20px !important;
+}
+
+.font-italic {
+  font-style: italic;
+}
+
+.panel-default {
+  border: none;
+}
+
+.panel-body {
+  padding: 0;
+}
+
+.panel-default>.panel-heading {
+  background: transparent;
+  border-color: #141a45;
+}
+
+.panel-default>.panel-body {
+  /* min-height: 250px; */
+}
+
+.panel-default>.panel-footer {
+  background: transparent;
+  border-color: #000634;
+}
+
+
+.table-responsive {
+    border: 0;
+}
+
+
+/** tile action butotns */
+.navigation__toggles {
+  width: 100%;
+  height: 100%;
+}
+
+.navigation__toggles>a {
+  display: inline-block;
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 24px;
+  background-color:#0f133a;
+  margin-right: 8px;
+  color: #01B8D3;
+  font-size: 12px;
+  vertical-align: top;
+  cursor: pointer;
+  -webkit-transition: background-color;
+  -o-transition: background-color;
+  transition: background-color;
+  -webkit-transition-duration: 250ms;
+  transition-duration: 250ms;
+}
+
+.navigation__toggles>a:hover {
+  background-color: #000000;
+}
+
+
+/** coin exchange modal css*/
+.custom-modal {
+  background: #0a0a2e;
+  max-width: 500px;
+  width: 100%;
+  padding: 5px;
+}
+
+.form-control:focus {
+  box-shadow: none !important;
+}
+
+.form-control:focus {
+  border-bottom: 1px solid #FFF;
+  background: transparent;
+  outline: 0;
+}
+
+
+.form-control {
+  color: #01B8D3;
+  width: 100%;
+  height: 35px;
+  background-color: transparent;
+  border: 1px solid #31424b;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.form-control {
+  resize: none;
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
+  padding: 0;
+}
+
+.form-control option {
+  color: #222222;
+}
+
+.input-sm {
+  height: 22px;
+  line-height: 1.5;
+  font-size: 12px;
+}
+
+.select-sm {
+  height: 200px;
+  line-height: 1.5;
+  font-size: 12px;
+  color: #b4bfc3;
+}
+
+.Select-control {
+  border-color: transparent;
+  background-color: transparent !important;
+  border-bottom: 1px solid #31424b;
+}

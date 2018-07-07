@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "outDir": "api/build/",
+    "rootDir": "./api/src",
+    "sourceMap": true,
+    "strict" : true
+  },
+  "include": [
+    "api/src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "client"
+  ]
+}

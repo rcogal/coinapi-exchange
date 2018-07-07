@@ -1,0 +1,19 @@
+{
+  
+    "env": {
+      "test": {
+        "presets": [  
+            ["env",
+              {
+                  "modules": "commonjs",
+                  "useBuiltIns": "usage",
+                  "debug": false
+              }
+            ],
+            "stage-0"
+        ],
+        "plugins":["transform-runtime"]
+      }
+    }
+    
+  }

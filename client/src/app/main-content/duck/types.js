@@ -1,0 +1,9 @@
+const GET_EXCHANGE = 'GET_EXCHANGE';
+const GET_ASSET = 'GET_ASSET'
+const GET_SETTING = 'GET_SETTING';
+
+export default {
+    GET_EXCHANGE,
+    GET_ASSET,
+    GET_SETTING
+}
