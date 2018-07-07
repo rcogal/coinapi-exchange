@@ -4,7 +4,7 @@ var axios_1 = require("axios");
 var CoinApiService = /** @class */ (function () {
     function CoinApiService() {
         this.baseUrl = 'https://rest.coinapi.io';
-        this.apiKey = 'FA49C145-2663-48E9-BFF7-FF085C4F1CE9';
+        this.apiKey = '';
         this.axios = axios_1.default;
     }
     CoinApiService.prototype.getAxios = function () {
