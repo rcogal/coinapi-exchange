@@ -2,6 +2,7 @@ import { CoinApiService } from '../../services/CoinApiService';
 import { BaseController } from '../BaseController';
 import {Response as ResponseData} from '../Response';
 import { AssetModel } from '../../models/AssetModel';
+import * as _ from 'underscore';
 
 export class AssetController extends BaseController{
 
@@ -13,9 +14,13 @@ export class AssetController extends BaseController{
         this.coinapiService = new CoinApiService();
     }
 
-    public get(): Promise<ResponseData> {
+    get(): Promise<ResponseData> {
         return this.coinapiService.getResource(this.path)
             .then(assets => this.json(true, <AssetModel[]>assets))
             .catch(err => this.json(false, [], err));
     }
+
+    getCryptoAssets(assets: AssetModel[]) {
+        return _.where(assets, { type_is_crypto: 1 });
+    };
 }

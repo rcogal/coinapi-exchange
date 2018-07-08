@@ -1,21 +1,33 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Select from 'react-select';
-import 'react-select/dist/react-select.css';
+// import Select from 'react-select';
+// import 'react-select/dist/react-select.css';
 import toneResources from '../../resources';
+import Picky from "react-picky";
+import "react-picky/dist/picky.css";
+import "./ModalSettings.css";
 
 class ModalSettings extends Component {
 
-    state = {
-        liquidity: 0,
-        selectedAssetBase: '',
-        selectedAssetQuote: '',
-        selectedTone: '',
-        filterOpportunity: 0,
-        assetBase: [],
-        exchange: [],
-        selectedExchange: [],
-        loading: false
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            liquidity: 0,
+            selectedAssetBase: null,
+            selectedAssetQuote: null,
+            selectedBaseQuote: null,
+            selectedTone: '',
+            filterOpportunity: 0,
+            assetBase: [],
+            exchange: [],
+            selectedExchange: [],
+            loading: false
+        }
+
+        this.quotes = [
+            'USD', 'EUR', 'GBP'
+        ];
     }
 
     componentWillMount() {
@@ -24,13 +36,15 @@ class ModalSettings extends Component {
         const {
             selectedAssetBase,
             selectedAssetQuote,
-            selectedExchange
+            selectedExchange,
+            selectedBaseQuote
         } = this.props;
 
         this.setState({
             selectedAssetBase,
             selectedAssetQuote,
-            selectedExchange
+            selectedExchange,
+            selectedBaseQuote
         });
 
         if (asset.data.success === true) {
@@ -41,27 +55,9 @@ class ModalSettings extends Component {
 
         if (exchange.data.success === true) {
             this.setState({
-                exchange: this.transformExchange(exchange.data.result)
+                exchange: exchange.data.result
             });
         }
-    }
-
-    transformExchange(exchange) {
-
-        const list = [];
-
-        exchange.forEach(item => {
-            list.push({
-                label: item.name,
-                value: item.exchange_id
-            });
-        });
-
-        return list;
-    }
-
-    getQuotes() {
-        return [ 'USD', 'EUR', 'GBP' ];
     }
 
     getAvailableTones() {
@@ -72,27 +68,39 @@ class ModalSettings extends Component {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    onSelectChange(selectedExchange) {
-        this.setState({ selectedExchange });
-    }
-
     onCloseConfigModal() {
         this.props.closeConfigModal();
     }
 
     onSave() {
+        console.log('modalSEttings', this.state)
         this.setState({loading: true});
         this.props.saveConfig(this.state);
     }
 
+    onSelectBaseQuotation(value) {
+        console.log(this.state)
+        this.setState({ selectedBaseQuote: value });
+    }
+
+    onSelectAssetBase(value) {
+        this.setState({ selectedAssetBase: value });
+    }
+
+    onSelectAssetQuote(value) {
+        this.setState({ selectedAssetQuote: value });
+    }
+
+    onSelectExchange(value) {
+        this.setState({ selectedExchange: value });
+    }
+
     render() {
-
-        var quotes = this.getQuotes();
         var availTones = this.getAvailableTones();
-
         var {
             selectedAssetBase,
             selectedAssetQuote,
+            selectedBaseQuote,
             liquidity,
             selectedExchange = [],
             assetBase,
@@ -118,45 +126,79 @@ class ModalSettings extends Component {
                         <div className="panel-body">
                             <div className="tab-content excoin-padding-20">
                                 <div className="tab-pane fade in active" id="tab1default">
-                                <div className="form-group">
-                                    <label className="font-italic">Enter liquidity (USD)</label>
-                                    <input name="liquidity" type="number" value={liquidity} onChange={this.onChange.bind(this)} className="form-control input-sm" />
-                                </div>
-                                <div className="form-group">
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <label className="font-italic">Select Base</label>
-                                            <select name="selectedAssetBase" value={selectedAssetBase} className="form-control input-sm" onChange={this.onChange.bind(this)}>
-                                                <option defaultValue>--</option>
-                                                {assetBase.map(asset =>
-                                                    <option key={asset.asset_id} value={asset.asset_id}>{asset.name}</option>
-                                                )}
-                                            </select>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <label className="font-italic">Select Quotes</label>
-                                            <select name="selectedAssetQuote" value={selectedAssetQuote} className="form-control input-sm" onChange={this.onChange.bind(this)}>
-                                                <option defaultValue>--</option>
-                                                {quotes.map(quote =>
-                                                    <option key={quote} value={quote}>{quote}</option>
-                                                )}
-                                            </select>
+                                    <div className="container text-center">
+                                        <div className="romels" style={{width: '130px', margin: '0 auto'}}>
+                                            <Picky
+                                                value={selectedBaseQuote}
+                                                options={this.quotes}
+                                                onChange={this.onSelectBaseQuotation.bind(this)}
+                                                open={false}
+                                                multiple={false}
+                                                includeSelectAll={false}
+                                                includeFilter={false}
+                                                placeholder="Select Quote"
+                                                className="select-quotation"
+                                                />
                                         </div>
                                     </div>
-                                </div>
-                                <div className="form-group">
-                                    <label className="font-italic">List of Exchanges</label>
-                                    <Select
-                                        closeOnSelect={false}
-                                        disabled={false}
-                                        onChange={this.onSelectChange.bind(this)}
-                                        multi
-                                        options={exchange}
-                                        simpleValue
-                                        value={selectedExchange}
-                                    />
-                                    <small className="font-italic">it will only display 5 exchanges in coin data grid</small>
-                                </div>
+                                    <div className="form-group mt-4">
+                                        <label className="font-italic">List of Exchanges</label>
+                                        <Picky
+                                            numberDisplayed={4}
+                                            value={selectedExchange}
+                                            options={exchange}
+                                            onChange={this.onSelectExchange.bind(this)}
+                                            open={false}
+                                            valueKey="exchange_id"
+                                            labelKey="name"
+                                            multiple={true}
+                                            includeSelectAll={true}
+                                            includeFilter={true}
+                                            placeholder=""
+                                            className="app-react-picky form-control"
+                                            />
+                                        <small className="font-italic">it will only display 5 exchanges in coin data grid</small>
+                                    </div>
+                                    <div className="form-group">
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <label className="font-italic">Select Base</label>
+                                                <Picky
+                                                    value={selectedAssetBase}
+                                                    options={assetBase}
+                                                    onChange={this.onSelectAssetBase.bind(this)}
+                                                    open={false}
+                                                    valueKey="asset_id"
+                                                    labelKey="name"
+                                                    multiple={false}
+                                                    includeSelectAll={false}
+                                                    includeFilter={true}
+                                                    placeholder=""
+                                                    className="app-react-picky form-control"
+                                                    />
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <label className="font-italic">Select Quote</label>
+                                                <Picky
+                                                    value={selectedAssetQuote}
+                                                    options={assetBase}
+                                                    onChange={this.onSelectAssetQuote.bind(this)}
+                                                    open={false}
+                                                    valueKey="asset_id"
+                                                    labelKey="name"
+                                                    multiple={false}
+                                                    includeSelectAll={false}
+                                                    includeFilter={true}
+                                                    placeholder=""
+                                                    className="app-react-picky form-control"
+                                                    />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <label className="font-italic">Enter liquidity</label>
+                                        <input name="liquidity" type="number" value={liquidity} onChange={this.onChange.bind(this)} className="form-control input-sm" />
+                                    </div>
                                 </div>
                                 <div className="tab-pane fade" id="tab2default">
                                     <div className="form-group">
@@ -180,7 +222,7 @@ class ModalSettings extends Component {
                     </div>
                 </div>
                 <div className="panel-footer text-muted text-center">
-                    <button disabled={loading} href="#" className="btn dream-btn margin-top-5" onClick={this.onSave.bind(this)}>
+                    <button disabled={false} href="#" className="btn dream-btn margin-top-5" onClick={this.onSave.bind(this)}>
                         {loading && (<i className="fa fa-spinner fa-spin" />)} SAVE
                     </button>
                     {'  '}

@@ -12,22 +12,22 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var BaseController_1 = require("../BaseController");
 var CoinApiService_1 = require("../../services/CoinApiService");
-var ExchangeRate = /** @class */ (function (_super) {
-    __extends(ExchangeRate, _super);
-    function ExchangeRate() {
+var ExchangeRateController = /** @class */ (function (_super) {
+    __extends(ExchangeRateController, _super);
+    function ExchangeRateController() {
         var _this = _super.call(this) || this;
         _this.path = 'v1/exchangerate';
         _this.coinapiService = new CoinApiService_1.CoinApiService();
         return _this;
     }
-    ExchangeRate.prototype.getRate = function (base, quote) {
+    ExchangeRateController.prototype.getRate = function (base, quote) {
         var _this = this;
         var resource = this.path + "/" + base + "/" + quote;
         return this.coinapiService.getResource(resource)
             .then(function (exchangerate) { return _this.json(true, exchangerate); })
             .catch(function (err) { return _this.json(false, [], err); });
     };
-    return ExchangeRate;
+    return ExchangeRateController;
 }(BaseController_1.BaseController));
-exports.ExchangeRate = ExchangeRate;
-//# sourceMappingURL=ExchangeRate.js.map
+exports.ExchangeRateController = ExchangeRateController;
+//# sourceMappingURL=ExchangeRateController.js.map

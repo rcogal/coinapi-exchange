@@ -19,50 +19,72 @@ var CurrentOrderbookController = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.path = 'v1/orderbooks/current';
         _this.displayLimit = 5;
+        _this.allowedQuotes = ['USD', 'EUR', 'GBP'];
         _this.coinapiService = new CoinApiService_1.CoinApiService();
         return _this;
     }
-    CurrentOrderbookController.prototype.get = function (symbols, liquidity) {
+    CurrentOrderbookController.prototype.get = function (symbols) {
         var _this = this;
-        liquidity = liquidity || 0;
         return this.coinapiService.getResource(this.path + "?filter_symbol_id=" + symbols)
             .then(function (orderbooks) {
-            return _this.json(true, _this.getCurrentOrderbookFilter(orderbooks, liquidity));
+            return _this.json(true, orderbooks);
         })
             .catch(function (err) { return _this.json(false, [], err); });
+    };
+    CurrentOrderbookController.prototype.getCurrentBookResource = function (exchangeInfo) {
+        var _this = this;
+        var extraInfo = {
+            rate: exchangeInfo.rate || 1,
+            liquidity: exchangeInfo.liquidity || 0
+        };
+        return this.get(exchangeInfo.symbolIds)
+            .then(function (results) {
+            if (results.success === true) {
+                return _this.json(true, _this.getCurrentOrderbookFilter(results.result, extraInfo));
+            }
+            else {
+                return results;
+            }
+        });
     };
     CurrentOrderbookController.prototype.getLiquidity = function (price, size) {
         return price * size;
     };
-    CurrentOrderbookController.prototype.getCurrentLiquidity = function (exchangeTypes, liquidity) {
+    CurrentOrderbookController.prototype.getCurrentLiquidity = function (exchangeTypes, extraInfo) {
         var _this = this;
+        var rate = extraInfo.rate, liquidity = extraInfo.liquidity;
         return _.find(exchangeTypes, function (item) {
-            return _this.getLiquidity(item.price, item.size) > liquidity;
+            return _this.getLiquidity(item.price * rate, item.size) > liquidity;
         });
     };
-    CurrentOrderbookController.prototype.getCurrentOrderbookFilter = function (orderbooks, liquidity) {
+    CurrentOrderbookController.prototype.getCurrentOrderbookFilter = function (orderbooks, extraParams) {
         var exchangeBids = [];
         var exchagneAsks = [];
+        var liquidity = extraParams.liquidity, rate = extraParams.rate;
         var me = this;
         _.each(orderbooks, function (orderbook) {
             var symbol_id = orderbook.symbol_id, asks = orderbook.asks, bids = orderbook.bids;
-            var exchange = symbol_id.split('_')[0]; // get the current 0 index for the name of current exchange
-            var ask = me.getCurrentLiquidity(asks, liquidity);
-            var bid = me.getCurrentLiquidity(bids, liquidity);
+            var symbol = symbol_id.split('_');
+            var exchange = symbol[0]; // get the current 0 index for the name of current exchange
+            var quote = symbol[symbol.length - 1];
+            var ask = me.getCurrentLiquidity(asks, extraParams);
+            var bid = me.getCurrentLiquidity(bids, extraParams);
             if (ask) {
+                var askPrice = ask.price * rate;
                 exchagneAsks.push({
-                    price: ask.price,
+                    price: askPrice,
                     size: ask.size,
                     exchange: exchange,
-                    liquidity: me.getLiquidity(ask.price, ask.size)
+                    liquidity: me.getLiquidity(askPrice, ask.size)
                 });
             }
             if (bid) {
+                var bidPrice = bid.price * rate;
                 exchangeBids.push({
-                    price: bid.price,
+                    price: bidPrice,
                     size: bid.size,
                     exchange: exchange,
-                    liquidity: me.getLiquidity(bid.price, bid.size)
+                    liquidity: me.getLiquidity(bidPrice, bid.size)
                 });
             }
         });
@@ -86,7 +108,6 @@ var CurrentOrderbookController = /** @class */ (function (_super) {
         var i = 0;
         bids = this.sortBidPrices(bids);
         asks = this.sortAskPrices(asks);
-        console.log(bids);
         while (i < maxSize) {
             var bid = bids[i] || {};
             var ask = asks[i] || {};

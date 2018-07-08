@@ -3,7 +3,7 @@ import {Response as ResponseData} from '../Response';
 import {CoinApiService} from '../../services/CoinApiService';
 import { ExchangeRateModel } from '../../models/ExchangeRateModel';
 
-export class ExchangeRate extends BaseController {
+export class ExchangeRateController extends BaseController {
 
     public path: string = 'v1/exchangerate';
     private coinapiService: CoinApiService;

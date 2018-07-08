@@ -12,6 +12,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var CoinApiService_1 = require("../../services/CoinApiService");
 var BaseController_1 = require("../BaseController");
+var _ = require("underscore");
 var AssetController = /** @class */ (function (_super) {
     __extends(AssetController, _super);
     function AssetController() {
@@ -26,6 +27,10 @@ var AssetController = /** @class */ (function (_super) {
             .then(function (assets) { return _this.json(true, assets); })
             .catch(function (err) { return _this.json(false, [], err); });
     };
+    AssetController.prototype.getCryptoAssets = function (assets) {
+        return _.where(assets, { type_is_crypto: 1 });
+    };
+    ;
     return AssetController;
 }(BaseController_1.BaseController));
 exports.AssetController = AssetController;

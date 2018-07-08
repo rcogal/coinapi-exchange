@@ -10,60 +10,87 @@ export class CurrentOrderbookController extends BaseController {
     public path: string = 'v1/orderbooks/current';
     public displayLimit: number = 5;
     private coinapiService!: CoinApiService;
+    private allowedQuotes = ['USD', 'EUR', 'GBP'];
 
     constructor(){
         super();
         this.coinapiService = new CoinApiService();
     }
 
-    get(symbols: string, liquidity: number): Promise<ResponseData> {
-
-        liquidity = liquidity || 0;
-
+    get(symbols: string): Promise<ResponseData> {
         return this.coinapiService.getResource(`${this.path}?filter_symbol_id=${symbols}`)
             .then(orderbooks => {
-                return this.json(true, this.getCurrentOrderbookFilter(orderbooks, liquidity));
+                return this.json(true, orderbooks);
             })
             .catch(err => this.json(false, [], err));
 
+    }
+
+    getCurrentBookResource(exchangeInfo: any) {
+
+        const extraInfo = {
+            rate: exchangeInfo.rate || 1,
+            liquidity: exchangeInfo.liquidity || 0
+        };
+
+        return this.get(exchangeInfo.symbolIds)
+            .then(results => {
+                if( results.success === true ) {
+                    return this.json(true, this.getCurrentOrderbookFilter(results.result, extraInfo));
+                } else {
+                    return results;
+                }
+            });
     }
 
     getLiquidity(price: number, size: number): number {
         return price * size;
     }
 
-    getCurrentLiquidity(exchangeTypes: any[], liquidity: number): any {
+    getCurrentLiquidity(exchangeTypes: any[], extraInfo: any): any {
+
+        const { rate, liquidity } = extraInfo;
+
         return _.find( exchangeTypes, (item: any) => {
-            return this.getLiquidity(item.price, item.size) > liquidity;
+            return this.getLiquidity(item.price * rate, item.size) > liquidity;
         });
     }
 
-    getCurrentOrderbookFilter(orderbooks: OrderBookModel[], liquidity: number): CurrentOrderbookModel[] {
+    getCurrentOrderbookFilter(orderbooks: OrderBookModel[], extraParams: any): CurrentOrderbookModel[] {
         const exchangeBids: any = [];
         const exchagneAsks: any = [];
+        const { liquidity, rate } = extraParams;
         const me = this;
 
         _.each(orderbooks, function (orderbook: OrderBookModel) {
             const {symbol_id, asks, bids} = orderbook;
-            const exchange = symbol_id.split('_')[0]; // get the current 0 index for the name of current exchange
-            const ask = me.getCurrentLiquidity(asks, liquidity);
-            const bid = me.getCurrentLiquidity(bids, liquidity);
+            const symbol = symbol_id.split('_');
+            const exchange = symbol[0]; // get the current 0 index for the name of current exchange
+            const quote = symbol[symbol.length - 1];
+            const ask = me.getCurrentLiquidity(asks, extraParams);
+            const bid = me.getCurrentLiquidity(bids, extraParams);
 
             if (ask) {
+
+                let askPrice = ask.price * rate;
+
                 exchagneAsks.push({
-                    price: ask.price,
+                    price: askPrice,
                     size: ask.size,
                     exchange: exchange,
-                    liquidity: me.getLiquidity(ask.price, ask.size)
+                    liquidity: me.getLiquidity(askPrice, ask.size)
                 });
             }
 
             if (bid) {
+
+                let bidPrice = bid.price * rate;
+
                 exchangeBids.push({
-                    price: bid.price,
+                    price: bidPrice,
                     size: bid.size,
                     exchange: exchange,
-                    liquidity: me.getLiquidity(bid.price, bid.size)
+                    liquidity: me.getLiquidity(bidPrice, bid.size)
                 })
             }
         });

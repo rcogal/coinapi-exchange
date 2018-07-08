@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ModalSettings from '../modal-settings/ModalSettings';
-import { fetchCurrentBook, postCurrentBook } from '../actions/orderbook';
+import ModalSettings from '../../components/modal-settings/ModalSettings';
+import { exchangeDataTableOperations } from './duck';
+import numberFormatter from '../../utils/number-formatter';
 import Modal from 'react-responsive-modal';
 import {soundManager} from 'soundmanager2';
+import './ExchangeDataTable.css';
 
 class CoinExchangeTable extends Component {
 
@@ -18,6 +20,7 @@ class CoinExchangeTable extends Component {
         liquidity: 0,
         selectedAssetBase: '',
         selectedAssetQuote: '',
+        selectedBaseQuote: null,
         // exchange panel reference
         tileHeader: '',
         // selected tone
@@ -25,10 +28,9 @@ class CoinExchangeTable extends Component {
         filterOpportunity: 0
     }
 
-
     autoRefreshTimer = null;
 
-    enableAutoRefresh = true;
+    enableAutoRefresh = false;
 
     // Checks the number of loading of records. use to prevent number of times for tone to ring
     isReload = true;
@@ -70,30 +72,13 @@ class CoinExchangeTable extends Component {
 
     onDeleteTile(e) {
         e.preventDefault();
-
         this.props.deleteTile(this.props.value);
     }
 
     // @todo create a utility for number formatter
     nFormatter(num, digits) {
-        var si = [
-          { value: 1, symbol: "" },
-          { value: 1E3, symbol: "k" },
-          { value: 1E6, symbol: "M" },
-          { value: 1E9, symbol: "G" },
-          { value: 1E12, symbol: "T" },
-          { value: 1E15, symbol: "P" },
-          { value: 1E18, symbol: "E" }
-        ];
-        var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-        var i;
-        for (i = si.length - 1; i > 0; i--) {
-          if (num >= si[i].value) {
-            break;
-          }
-        }
-        return (num / si[i].value).toFixed(digits).replace(rx, "$1") + si[i].symbol;
-      }
+        return numberFormatter.nFormatter(num, digits);
+    }
 
     onCloseConfigModal(e) {
         this.setState({ openModal: false });
@@ -110,8 +95,8 @@ class CoinExchangeTable extends Component {
         } catch (e) {
 
         } finally {
-            switch (Math.sign(opportunity)) {
-                case 0: 
+            switch (numberFormatter.mathSign(opportunity)) {
+                case 0:
                 case 1: return <label className="color-green">{opportunity.toFixed(2) + '%'} </label>;
                 case -0:
                 case -1: return <label className="color-red">{opportunity.toFixed(2) + '%'}</label>;
@@ -142,46 +127,44 @@ class CoinExchangeTable extends Component {
         });
     }
 
-    fetchPostOrderBook(settings = {}) {
+    updateTile(settings) {
+        var exchanges = settings.selectedExchange;
+        var baseQuote = settings.selectedBaseQuote;
+        var assetaBase = settings.selectedAssetBase;
+        var assetQuote = settings.selectedAssetQuote;
+        var liquidity = settings.liquidity;
+        var formattedExchanges;
 
-        var exchanges = settings.selectedExchange.split(',') || [];
+        if (exchanges.length) {
+            formattedExchanges = exchanges.map(function (item) {
+                return item.exchange_id + '_SPOT_' + assetaBase.asset_id + '_' + assetQuote.asset_id;
+            }).join(';');
+        }
 
-        this.props.postCurrentBook({
-            base: settings.selectedAssetBase,
-            quote: settings.selectedAssetQuote,
-            liquidity: settings.liquidity,
-            settings
-        }).then(orderbook => {
-            if (orderbook.data.success === true) {
+        this.props.fetchCurrentOrderbook({
+            baseQuote: baseQuote,
+            assetQuote: assetQuote.asset_id,
+            symbolIds: formattedExchanges,
+            liquidity: liquidity || 0
+        }).then(response => {
+
+            var payload = response.payload;
+
+            console.log(payload)
+
+            if (payload.data.success === true) {
                 this.updateStates(settings);
 
                 this.setState({
-                    orderbooks: orderbook.data.result,
+                    orderbooks: payload.data.result,
                     openModal: this.autoRefreshTimer && this.state.openModal ? true : false,
-                    tileHeader: `${settings.selectedAssetBase}/${settings.selectedAssetQuote}, ${settings.liquidity || 0} (Liquidity), ${exchanges.length} (Selected Exchanges)`
+                    tileHeader: `${settings.selectedAssetBase.asset_id}/${settings.selectedAssetQuote.asset_id}, ${settings.liquidity || 0} (Liquidity), ${exchanges.length} Selected Exchanges`
                 });
 
                 this.autoRefresh();
             } else {
-                alert(orderbook.data.message);
+                alert(payload.data.message);
             }
-        });
-    }
-
-    updateTile(settings) {
-
-        const { liquidity = 0, selectedAssetBase, selectedAssetQuote, selectedExchange } = settings;
-
-        if (!selectedAssetBase || !selectedAssetQuote || !selectedExchange.length) {
-            return false;
-        }
-        // this.fetchCurrentBook(liquidity, selectedExchange, settings);
-
-        this.fetchPostOrderBook({
-            selectedAssetBase,
-            selectedAssetQuote,
-            selectedExchange,
-            liquidity
         });
     }
 
@@ -229,6 +212,7 @@ class CoinExchangeTable extends Component {
             openModal,
             selectedAssetBase,
             selectedAssetQuote,
+            selectedBaseQuote,
             selectedExchange,
             tileHeader
         } = this.state;
@@ -255,7 +239,7 @@ class CoinExchangeTable extends Component {
                         </div>
                     </div>
                     <div className="panel-body">
-                        <div className="table-responsive x-app-table-responsive x-mh-232">
+                        <div className="table-responsive x-app-table-responsive app-panel-body-min-height">
                             <table className="table table-striped">
                                 <thead>
                                     <tr>
@@ -297,6 +281,7 @@ class CoinExchangeTable extends Component {
                         selectedExchange={selectedExchange}
                         selectedAssetBase={selectedAssetBase}
                         selectedAssetQuote={selectedAssetQuote}
+                        selectedBaseQuote={selectedBaseQuote}
                         closeConfigModal={this.onCloseConfigModal.bind(this)}
                         saveConfig={this.save.bind(this)}
                         />
@@ -310,4 +295,6 @@ const mapStateToProps = state => ({
     metadata: state.metadata
 });
 
-export default connect(mapStateToProps, { fetchCurrentBook, postCurrentBook })(CoinExchangeTable);
+export default connect(mapStateToProps, {
+    fetchCurrentOrderbook: exchangeDataTableOperations.fetchCurrentOrderbook
+})(CoinExchangeTable);

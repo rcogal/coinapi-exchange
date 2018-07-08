@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class Footer extends Component {
     render() {
         return (
-            <footer>
+            <footer className="app-footer">
                 <div className="container-fluid" id="excoin-footer-primary">
                     <div className="row">
                         <div className="col-sm-3"></div>
@@ -14,11 +14,11 @@ class Footer extends Component {
                             </ul>
                         </div>
                         <div className="col-sm-2">
-                            <h4 className="font-bold">About Us</h4>
-                            <ul>
-                                <li><a href="">Company Information</a></li>
-                                <li><a href="">Contact us</a></li>
-                            </ul>
+                                <h4 className="font-bold">About Us</h4>
+                                <ul>
+                                    <li><a href="">Company Information</a></li>
+                                    <li><a href="">Contact us</a></li>
+                                </ul>
                         </div>
                         <div className="col-sm-2">
                             <h4 className="font-bold">Support</h4>
@@ -28,6 +28,7 @@ class Footer extends Component {
                                 <li><a href="">Forums</a></li>
                             </ul>
                         </div>
+                        <div className="col-sm-3"></div>
                     </div>
                 </div>
                 <div className="copyright">

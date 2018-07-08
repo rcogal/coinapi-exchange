@@ -3,7 +3,8 @@ body {
   background: linear-gradient(to right, #010111, #060626);
   color: #01B8D3;
   font-size: 12px;
-  padding-top: 120px
+  /* padding-top: 120px */
+
 }
 
 .excoin-brandname {
@@ -206,15 +207,6 @@ footer {
 
 .navigation__toggles>a:hover {
   background-color: #000000;
-}
-
-
-/** coin exchange modal css*/
-.custom-modal {
-  background: #0a0a2e;
-  max-width: 500px;
-  width: 100%;
-  padding: 5px;
 }
 
 .form-control:focus {

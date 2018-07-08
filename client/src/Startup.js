@@ -14,7 +14,7 @@ class Startup extends Component {
         const that = this;
 
         axios.all([ this.props.fetchCryptoAssets(), this.props.fetchExchanges() ])
-            .then(axios.spread(function (acct, perms) {
+            .then(axios.spread(function (assets, exchanges) {
                 that.setState({
                     connection: true
                 });
@@ -41,7 +41,6 @@ class Startup extends Component {
             </div>);
     }
 }
-
 
 export default connect(null, {
     fetchCryptoAssets: mainContentOperations.fetchCryptoAssets,
