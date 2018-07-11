@@ -163,8 +163,9 @@ class CoinExchangeTable extends Component {
 
                 this.autoRefresh();
             } else {
-                toast.error(payload.data.message, {
-                    position: toast.POSITION.TOP_RIGHT
+                toast(payload.data.message, {
+                    position: toast.POSITION.TOP_RIGHT,
+                    className: 'black-background'
                 });
             }
         });

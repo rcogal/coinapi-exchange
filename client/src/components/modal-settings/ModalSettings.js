@@ -82,7 +82,8 @@ class ModalSettings extends Component {
             this.setState({loading: true});
             this.props.saveConfig(this.state);
         } else {
-            toast.warn( 'Please fill all the required fields', {
+            toast( 'Please fill all the required fields', {
+                className: 'black-background',
                 position: toast.POSITION.TOP_RIGHT
             })
         }
