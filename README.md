@@ -31,6 +31,10 @@ $ cd coinapi-exchange
 $ npm run-script build:ts
 ```
 
+## Demo
+
+* [coinapiexchange](https://coinapiexchange.herokuapp.com/) - working application
+
 ## License
  
 The MIT License (MIT)
