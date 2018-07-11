@@ -1,0 +1,37 @@
+.navbar {
+    min-height: 80px;
+    /* background: #1E2A31;  */
+    /* background: #333333; */
+    background: #1E2A31;
+    line-height: 80px;
+}
+
+.excoin-brandname {
+    font-size: 24px;
+}
+
+
+.navbar ul li {
+    height: 80px;
+}
+  
+.navbar-brand {
+    padding: 0 15px;
+    height: 80px;
+    line-height: 80px;
+    font-weight: bold;
+}
+
+.navbar-nav {
+    height: 80px;
+    line-height: 80px;
+    padding: 0 15px;
+}
+
+.navbar-default {
+    border-color: #141a45 !important;
+}
+
+.app-header-border-bottom {
+    border-bottom: 1px solid #2b3942 !important;
+}

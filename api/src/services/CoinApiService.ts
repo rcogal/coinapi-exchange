@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 export class CoinApiService {
 
     private baseUrl: string = 'https://rest.coinapi.io';
@@ -17,7 +16,7 @@ export class CoinApiService {
 
     public getResource(resource: string): Promise<any>{
         return this.axiosInstance.get(resource)
-            .then( response => response.data )
-            .catch( err => err);
+            .then( response => response)
+            .catch( err => err.response);
     }
 }

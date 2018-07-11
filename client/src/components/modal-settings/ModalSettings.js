@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-// import Select from 'react-select';
-// import 'react-select/dist/react-select.css';
 import toneResources from '../../resources';
 import Picky from "react-picky";
 import "react-picky/dist/picky.css";
 import "./ModalSettings.css";
+import { toast, ToastContainer } from 'react-toastify';
 
 class ModalSettings extends Component {
 
@@ -73,13 +72,23 @@ class ModalSettings extends Component {
     }
 
     onSave() {
-        console.log('modalSEttings', this.state)
-        this.setState({loading: true});
-        this.props.saveConfig(this.state);
+
+        const {selectedBaseQuote, selectedExchange, selectedAssetBase, selectedAssetQuote} = this.state;
+
+        debugger;
+
+        if (selectedBaseQuote && selectedExchange.length &&
+                selectedAssetBase && selectedAssetQuote ) {
+            this.setState({loading: true});
+            this.props.saveConfig(this.state);
+        } else {
+            toast.warn( 'Please fill all the required fields', {
+                position: toast.POSITION.TOP_RIGHT
+            })
+        }
     }
 
     onSelectBaseQuotation(value) {
-        console.log(this.state)
         this.setState({ selectedBaseQuote: value });
     }
 
@@ -136,13 +145,13 @@ class ModalSettings extends Component {
                                                 multiple={false}
                                                 includeSelectAll={false}
                                                 includeFilter={false}
-                                                placeholder="Select Quote"
-                                                className="select-quotation"
+                                                placeholder="Quote Conversion *"
+                                                className="app-react-picky form-control quote-conversion"
                                                 />
                                         </div>
                                     </div>
                                     <div className="form-group mt-4">
-                                        <label className="font-italic">List of Exchanges</label>
+                                        <label className="font-italic">List of Exchanges *</label>
                                         <Picky
                                             numberDisplayed={4}
                                             value={selectedExchange}
@@ -153,7 +162,7 @@ class ModalSettings extends Component {
                                             labelKey="name"
                                             multiple={true}
                                             includeSelectAll={true}
-                                            includeFilter={true}
+                                            includeFilter={false}
                                             placeholder=""
                                             className="app-react-picky form-control"
                                             />
@@ -162,7 +171,7 @@ class ModalSettings extends Component {
                                     <div className="form-group">
                                         <div className="row">
                                             <div className="col-sm-6">
-                                                <label className="font-italic">Select Base</label>
+                                                <label className="font-italic">Select Base *</label>
                                                 <Picky
                                                     value={selectedAssetBase}
                                                     options={assetBase}
@@ -172,13 +181,13 @@ class ModalSettings extends Component {
                                                     labelKey="name"
                                                     multiple={false}
                                                     includeSelectAll={false}
-                                                    includeFilter={true}
+                                                    includeFilter={false}
                                                     placeholder=""
                                                     className="app-react-picky form-control"
                                                     />
                                             </div>
                                             <div className="col-sm-6">
-                                                <label className="font-italic">Select Quote</label>
+                                                <label className="font-italic">Select Quote *</label>
                                                 <Picky
                                                     value={selectedAssetQuote}
                                                     options={assetBase}
@@ -188,7 +197,7 @@ class ModalSettings extends Component {
                                                     labelKey="name"
                                                     multiple={false}
                                                     includeSelectAll={false}
-                                                    includeFilter={true}
+                                                    includeFilter={false}
                                                     placeholder=""
                                                     className="app-react-picky form-control"
                                                     />

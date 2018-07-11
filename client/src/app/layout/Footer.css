@@ -1,0 +1,22 @@
+.copyright {
+    padding: 10px 0;
+    color: #ccc;
+    background: #212e36;
+    /* background: #2c2c2c;  */
+}
+
+#excoin-footer-primary li a {
+    color: #d4cbcb;
+    text-decoration: underline;
+}
+
+#excoin-footer-primary {
+    /* background: #333333 !important; */
+    background: #1E2A31;
+    padding: 20px;
+    border-bottom: 1px solid #2c2c2c;
+}
+
+footer {
+    margin-top: 25px;
+}

@@ -24,8 +24,8 @@ var AssetController = /** @class */ (function (_super) {
     AssetController.prototype.get = function () {
         var _this = this;
         return this.coinapiService.getResource(this.path)
-            .then(function (assets) { return _this.json(true, assets); })
-            .catch(function (err) { return _this.json(false, [], err); });
+            .then(function (response) { return _this.json(true, response.data); })
+            .catch(function (err) { return _this.json(false, [], err.statusText); });
     };
     AssetController.prototype.getCryptoAssets = function (assets) {
         return _.where(assets, { type_is_crypto: 1 });

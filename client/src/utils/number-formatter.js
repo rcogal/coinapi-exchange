@@ -24,5 +24,6 @@ function mathSign(x) {
 }
 
 export default {
-    nFormatter
+    nFormatter,
+    mathSign
 };

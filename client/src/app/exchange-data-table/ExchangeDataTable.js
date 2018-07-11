@@ -6,6 +6,8 @@ import numberFormatter from '../../utils/number-formatter';
 import Modal from 'react-responsive-modal';
 import {soundManager} from 'soundmanager2';
 import './ExchangeDataTable.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class CoinExchangeTable extends Component {
 
@@ -150,8 +152,6 @@ class CoinExchangeTable extends Component {
 
             var payload = response.payload;
 
-            console.log(payload)
-
             if (payload.data.success === true) {
                 this.updateStates(settings);
 
@@ -163,7 +163,9 @@ class CoinExchangeTable extends Component {
 
                 this.autoRefresh();
             } else {
-                alert(payload.data.message);
+                toast.error(payload.data.message, {
+                    position: toast.POSITION.TOP_RIGHT
+                });
             }
         });
     }
@@ -204,6 +206,10 @@ class CoinExchangeTable extends Component {
         this.updateTile(settings);
     }
 
+    toast() {
+        
+    }
+
     render() {
 
         var {
@@ -218,8 +224,8 @@ class CoinExchangeTable extends Component {
         } = this.state;
 
         return (
-            <div className="col-md-6 shadow">
-                <div className="panel panel-default">
+            <div className="col-md-6">
+                <div className="panel panel-default shadow">
                     <div className="panel-heading excoin-color-light">
                         <div className="row">
                             <div className="col-sm-6 text-left">
@@ -284,8 +290,10 @@ class CoinExchangeTable extends Component {
                         selectedBaseQuote={selectedBaseQuote}
                         closeConfigModal={this.onCloseConfigModal.bind(this)}
                         saveConfig={this.save.bind(this)}
+                        toast={this.toast.bind(this)}
                         />
                 </Modal>
+                <ToastContainer />
             </div>
         );
     }

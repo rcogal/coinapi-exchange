@@ -43,8 +43,6 @@ module.exports = (app: Application) => {
 
                         if (exchangeRate.success === true ) {
                             req.params.rate = exchangeRate.result.rate;
-                            console.log(req.params);
-
                             orderbookCtrlr.getCurrentBookResource(req.params)
                                 .then(orderbooks => res.json(orderbooks));
                         } else {

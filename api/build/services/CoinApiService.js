@@ -4,7 +4,7 @@ var axios_1 = require("axios");
 var CoinApiService = /** @class */ (function () {
     function CoinApiService() {
         this.baseUrl = 'https://rest.coinapi.io';
-        this.apiKey = '';
+        this.apiKey = 'FA49C145-2663-48E9-BFF7-FF085C4F1CE9';
         this.axios = axios_1.default;
     }
     Object.defineProperty(CoinApiService.prototype, "axiosInstance", {
@@ -21,8 +21,8 @@ var CoinApiService = /** @class */ (function () {
     });
     CoinApiService.prototype.getResource = function (resource) {
         return this.axiosInstance.get(resource)
-            .then(function (response) { return response.data; })
-            .catch(function (err) { return err; });
+            .then(function (response) { return response; })
+            .catch(function (err) { return err.response; });
     };
     return CoinApiService;
 }());

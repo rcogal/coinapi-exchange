@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './Header.css';
 
 class Header extends Component {
     onCreateTile() {
@@ -7,7 +8,7 @@ class Header extends Component {
 
     render() {
         return (
-            <nav className="navbar navbar-expand-md navbar-dark fixed-top py-0">
+            <nav className="navbar navbar-expand-md navbar-dark fixed-top py-0 shadow app-header-border-bottom">
                 <div className="container">
                     <div className="navbar-brand excoin-brandname">
                         <label className="excoin-label-secondary">Coin</label>

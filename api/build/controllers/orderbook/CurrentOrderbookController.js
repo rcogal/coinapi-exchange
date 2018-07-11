@@ -26,10 +26,15 @@ var CurrentOrderbookController = /** @class */ (function (_super) {
     CurrentOrderbookController.prototype.get = function (symbols) {
         var _this = this;
         return this.coinapiService.getResource(this.path + "?filter_symbol_id=" + symbols)
-            .then(function (orderbooks) {
-            return _this.json(true, orderbooks);
+            .then(function (response) {
+            if (response.success) {
+                return _this.json(true, response.data);
+            }
+            else {
+                return _this.json(false, [], response.statusText);
+            }
         })
-            .catch(function (err) { return _this.json(false, [], err); });
+            .catch(function (err) { return _this.json(false, [], err.statusText); });
     };
     CurrentOrderbookController.prototype.getCurrentBookResource = function (exchangeInfo) {
         var _this = this;

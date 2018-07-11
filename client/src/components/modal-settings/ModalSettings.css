@@ -1,5 +1,5 @@
 .custom-modal {
-    background: #0a0a2e;
+    background: #222f37;
     max-width: 400px;
     width: 100%;
     padding: 5px;
@@ -7,7 +7,7 @@
 
 
 .app-react-picky.form-control button {
-    color: #01B8D3;
+    color: #d4cbcb;
     width: 100%;
     height: 35px;
     background-color: transparent;
@@ -24,4 +24,40 @@
     border-right: 0;
     border-top: 0;
     padding: 0;
+}
+
+
+.form-control {
+    color: #01B8D3;
+    width: 100%;
+    height: 35px;
+    background-color: transparent;
+    border: 1px solid #31424b;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  }
+  
+  .form-control {
+    resize: none;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+    padding: 0;
+  }
+
+.nav-tabs li a {
+    color: #d4cbcb;
+    font-weight: bold;
+}
+
+.nav-tabs li.active a {
+    color: #000;
+}
+
+.app-react-picky.form-control.quote-conversion button {
+    text-align: center
 }

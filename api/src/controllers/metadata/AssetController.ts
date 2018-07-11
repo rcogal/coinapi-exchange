@@ -16,8 +16,8 @@ export class AssetController extends BaseController{
 
     get(): Promise<ResponseData> {
         return this.coinapiService.getResource(this.path)
-            .then(assets => this.json(true, <AssetModel[]>assets))
-            .catch(err => this.json(false, [], err));
+            .then(response => this.json(true, <AssetModel[]>response.data))
+            .catch(err => this.json(false, [], err.statusText));
     }
 
     getCryptoAssets(assets: AssetModel[]) {

@@ -23,8 +23,8 @@ var ExchangeController = /** @class */ (function (_super) {
     ExchangeController.prototype.get = function () {
         var _this = this;
         return this.coinapiService.getResource(this.path)
-            .then(function (exchanges) { return _this.json(true, exchanges); })
-            .catch(function (err) { return _this.json(false, [], err); });
+            .then(function (response) { return _this.json(true, response.data); })
+            .catch(function (err) { return _this.json(false, [], err.statusText); });
     };
     return ExchangeController;
 }(BaseController_1.BaseController));

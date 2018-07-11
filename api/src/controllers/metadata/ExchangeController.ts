@@ -15,7 +15,7 @@ export class ExchangeController extends BaseController {
 
     public get(): Promise<ResponseData> {
         return this.coinapiService.getResource(this.path)
-            .then(exchanges => this.json(true, <ExchangeModel[]>exchanges))
-            .catch(err => this.json(false, [], err))
+            .then(response => this.json(true, <ExchangeModel[]>response.data))
+            .catch(err => this.json(false, [], err.statusText))
     }
 }

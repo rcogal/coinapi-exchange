@@ -19,10 +19,14 @@ export class CurrentOrderbookController extends BaseController {
 
     get(symbols: string): Promise<ResponseData> {
         return this.coinapiService.getResource(`${this.path}?filter_symbol_id=${symbols}`)
-            .then(orderbooks => {
-                return this.json(true, orderbooks);
+            .then(response => {
+                if (response.success) {
+                    return this.json(true, response.data);
+                } else {
+                    return this.json(false, [], response.statusText);
+                }
             })
-            .catch(err => this.json(false, [], err));
+            .catch(err => this.json(false, [], err.statusText));
 
     }
 
