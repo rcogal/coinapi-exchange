@@ -20,7 +20,8 @@ export class CurrentOrderbookController extends BaseController {
     get(symbols: string): Promise<ResponseData> {
         return this.coinapiService.getResource(`${this.path}?filter_symbol_id=${symbols}`)
             .then(response => {
-                if (response.success) {
+                console.log(response.status);
+                if (response.status === 200) {
                     return this.json(true, response.data);
                 } else {
                     return this.json(false, [], response.statusText);

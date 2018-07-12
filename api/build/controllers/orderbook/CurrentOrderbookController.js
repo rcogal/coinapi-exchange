@@ -27,7 +27,8 @@ var CurrentOrderbookController = /** @class */ (function (_super) {
         var _this = this;
         return this.coinapiService.getResource(this.path + "?filter_symbol_id=" + symbols)
             .then(function (response) {
-            if (response.success) {
+            console.log(response.status);
+            if (response.status === 200) {
                 return _this.json(true, response.data);
             }
             else {
